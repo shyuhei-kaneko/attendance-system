@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <%= form_for @user, :url => attend_update_path, :html => {:method => :patch} do |f| %>
     <table class="s-tbl" border="1" width="1200">
     <tr align="center" height="30">
       <td>日付</td>
