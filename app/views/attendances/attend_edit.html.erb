@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <table class="s-tbl" border="1" width="1200">
+    <tr align="center" height="30">
+      <td>日付</td>
+      <td>曜日</td>
+      <td>出社</td>
+      <td>退社</td>
+      <td>在社時間</td>
+      <td>備考</td>
+      <td>残業指示</td>
+      <td>指示者</td>
+    </tr>
+    <%= form_for @user, :url => {:action => 'attend_update'}, method: "patch" do |f| %>
+    <%#= form_for @user, :url => attend_edit_path, :html => {:method => :patch} do |f| %>
+      <% (@first_day..@last_day).each do |temp_day| %>
+        <tr align="center" valign="top" font-size= 20pt height="100">
+          <td><%= @first_day.to_date.month %>/<%= temp_day.day %></td>
+          <td><%= @youbi [@first_day.change(day: temp_day.day) .wday] %></td>
+          <% comparison_date = Date.new(@first_day.year,@first_day.month,temp_day.day) %>
+  				<% work = Attendance.find_by(attendance_date: comparison_date, user_id: @user.id) %>
+          <td width="50">
+    				<%= fields_for "attendances[]", work do |fi| %>
+    					<%= fi.time_field :arrival, class: 'form-control' %>
+    			</td>		
+          <td width="50">
+              <%= fi.time_field :departure, class: 'form-control' %>
+					</td>
+				　　　<% end %>
+
+			
+          <td></td>
+          <td><input type="text" name="備考" size="4" maxlength="20" ></td>
+          <td><input type="text" name="残業指示" size="4" maxlength="20" ></td>
+          <td><input type="text" name="指示者" size="4" maxlength="20" ></td>
+        </tr>
+      <% end %> <%# each doループのend %>
+
+      </table>
+      <br><br><br>
+      <center>
+        <%= link_to "キャンセル", 'users/current_user.id', style:"color:white", class: "btn btn-primary" %>
+        <%= f.submit "編集を保存する", class: "btn btn-primary" %>
+      </center>
+	  <% end %> <%# form_forのend %>
+  </body>
+</html>

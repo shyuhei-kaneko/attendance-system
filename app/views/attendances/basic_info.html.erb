@@ -1,0 +1,45 @@
+<%= form_for(current_user, :url => {:controller => :attendances, :action => :ba_info_edit}) do |f| %>
+　<%= hidden_field_tag :id, @user.id %>
+  <%= render 'shared/error_messages', object: current_user %>
+    <h1>基本情報の更新</h1>
+    <center>
+      <h3>id: <%= @user.id %> 氏名：<%= @user.name %></h3>
+    </center>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+      <%= f.label :指定勤務時間 %>
+
+      
+      <%= f.time_field :pointing_work_time, class: 'form-control' %>
+
+      <%= f.label :基本勤務時間 %>
+      <%= f.time_field :basic_work_time, class: 'form-control'%>
+      <center>
+        <%= f.submit "更新", class: "btn btn-primary" %>
+      </center>
+      <% end %>
+      </div>
+    </div>
+    
+    
+<!--<%# provide(:title, "基本情報の更新") %>-->
+<!--<h1><font color="#0101DF">基本情報の更新</h1>-->
+<!-- id: <%#= @user.id %> 氏名：<%#= @user.name %>-->
+<!--<div class="row">-->
+
+
+<!--  <div class="col-md-6 col-md-offset-3">-->
+<!--    <%#= form_for(@user, url:basic_info_edit_path, method: :post) do |f| %>-->
+<!--      <%#= hidden_field_tag :id, @user.id %>-->
+<!--      <%#= render 'shared/error_messages', object: f.object %>-->
+
+<!--      <%#= f.label :指定勤務時間 %>-->
+<!--      <%#= f.time_field :fixed_work_time, class: 'form-control' %>-->
+
+<!--      <%#= f.label :基本勤務時間 %>-->
+<!--      <%#= f.time_field :basic_work_time, class: 'form-control' %>-->
+
+<!--      <%#= f.submit "編集",  name:"basic_info_submit", class: "btn btn-primary" %>-->
+<!--    <%# end %></font>-->
+<!--  </div>-->
+<!--</div>-->
