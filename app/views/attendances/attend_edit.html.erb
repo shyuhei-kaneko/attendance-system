@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <%= form_for @user, :url => attend_update_path, :html => {:method => :patch} do |f| %>
     <table class="s-tbl" border="1" width="1200">
     <tr align="center" height="30">
       <td>日付</td>
@@ -12,7 +13,8 @@
       <td>残業指示</td>
       <td>指示者</td>
     </tr>
-    <%= form_for @user, :url => {:action => 'attend_update'}, method: "patch" do |f| %>
+    <%#= form_for @user, :url => {:action => 'attend_update'}, method: "patch" do |f| %>
+    <%#= form_for @user, :url => attend_update_path, :html => {:method => :patch} do |f| %>
     <%#= form_for @user, :url => attend_edit_path, :html => {:method => :patch} do |f| %>
       <% (@first_day..@last_day).each do |temp_day| %>
         <tr align="center" valign="top" font-size= 20pt height="100">

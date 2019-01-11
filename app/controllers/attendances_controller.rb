@@ -44,7 +44,7 @@ class AttendancesController < ApplicationController
   end
   
   def attend_update
-    @user = User.find(current_user.id)
+    @user = User.find_by(id: current_user.id)
     error_count = 0
     message = ""
     
@@ -83,7 +83,8 @@ class AttendancesController < ApplicationController
       end #eachの締め
     end
     # redirect_to("/attendances/attend_edit")
-    redirect_to url:{:action=>"show", :controller=>"users", :id=>params[:id]}
+    # redirect_to url:{:action=>"show", :controller=>"users", :id=>params[:id]}
+    redirect_to user_path(current_user.id)
   end
   
   def attend_edit
