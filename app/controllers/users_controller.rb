@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   @attendance = Attendance.where(created_at: @first_day...@to, user_id: @user.id)
   # @attendance = @attendance.find_by(user_id: @user.id)
     (@first_day..@last_day).each do |temp_day|
-      comparison_date = Date.new(Date.current.year,Date.current.month,temp_day.day)
+      comparison_date = Date.new(temp_day.year,temp_day.month,temp_day.day)
     	if Attendance.find_by(attendance_date: comparison_date, user_id: @user.id).nil?
     		work = Attendance.new(attendance_date: comparison_date, user_id: @user.id)
     		work.save

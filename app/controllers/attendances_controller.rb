@@ -51,7 +51,7 @@ class AttendancesController < ApplicationController
     
     works_params.each do |id, item|
           attendance = Attendance.find(current_user.id)
-          
+          # byebug
           #出社時間と退社時間の両方の存在を確認
           if item["arrival"].blank? && item["departure"].blank?
             message = '一部編集が無効となった項目があります。'

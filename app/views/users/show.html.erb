@@ -22,7 +22,7 @@
         <td colspan="3">07 : 50 基本時間</td>
       <% end %>
             
-      <td>初日 <%= @first_day.month %>/<%= @first_day.day %></td>
+      <td>初日 <%= @first_day.strftime("%m/%d") %></td>
       
     </tr>
     <tr align="center">
@@ -31,11 +31,19 @@
       <% else %>
         <td>所属 <%=  %></td>
       <% end %>
+      
       <td>氏名 <%= @user.name %></td>
       <td>コード</td>
+      
       <td width="10"></td>
-      <td>出勤日数<%= @attendance_sum if @attendance_sum.present? %></td>
-      <td>締め <%= @first_day.month %>/<%= @last_day.day %></td>
+      
+      <% if @attendance_sum.present? %>
+        <td><% "出勤日数 #{@attendance_sum}日"%></td>
+      <% else %>
+        <td><% 出勤日数 %></td>
+      <% end %>
+      
+      <td>締め <%= @last_day.strftime("%m/%d") %></td>
     </tr>
     </table> 
 </body>
@@ -69,7 +77,7 @@
               <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
                     <% if value.arrival.present? %>
-                      <%= value.arrival.hour if value.attendance_date == temp_day %>
+                      <%= value.arrival.strftime("%H") if value.attendance_date == temp_day %>
                     <% end %>
                   <% end %>
                 <% end %>
@@ -79,7 +87,7 @@
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
                     <% if value.arrival.present? %>
-                      <%= value.arrival.min if value.attendance_date == temp_day %>
+                      <%= value.arrival.strftime("%M") if value.attendance_date == temp_day %>
                     <% end %>
                   <% end %>
                 <% end %>
@@ -101,7 +109,7 @@
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
                     <% if value.departure.present? %>
-                      <%= value.departure.hour if value.attendance_date == temp_day %>
+                      <%= value.departure.strftime("%H") if value.attendance_date == temp_day %>
                     <% end %>
                   <% end %>
                 <% end %>
@@ -111,7 +119,7 @@
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
                     <% if value.departure.present? %>
-                      <%= value.departure.min if value.attendance_date == temp_day %>
+                      <%= value.departure.strftime("%M") if value.attendance_date == temp_day %>
                     <% end %>
                   <% end %>
                 <% end %>
