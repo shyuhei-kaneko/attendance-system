@@ -50,24 +50,26 @@ class AttendancesController < ApplicationController
     message = ""
     
     works_params.each do |id, item|
-          attendance = Attendance.find(current_user.id)
+          attendance = Attendance.find(id)
           # byebug
           #出社時間と退社時間の両方の存在を確認
-          if item["arrival"].blank? && item["departure"].blank?
+          if item["arrival"].nil? && item["departure"].nil?
             message = '一部編集が無効となった項目があります。'
             
             # 当日以降の編集はadminユーザのみ
-          elsif attendance.attendance_date > Date.current && !current_user.admin?
-            message = '明日以降の勤怠編集は出来ません。'
-            error_count += 1
-          
+          elsif attendance.attendance_date > Date.current && @user.name != "admin"
+            # byebug
+            if item["arrival"].blank? || item["departure"].blank? 
+              message = '明日以降の勤怠編集は出来ません。'
+              error_count += 1
+            end
           #出社時間 > 退社時間ではないか
           elsif item["arrival"].to_s > item["departure"].to_s
             message = '出社時間より退社時間が早い項目がありました'
             error_count += 1
           end
     end #eachの締め
-    
+    # byebug
     if error_count > 0
       flash[:warning] = message
     else
@@ -75,18 +77,25 @@ class AttendancesController < ApplicationController
           attendance = Attendance.find(id)
           
           # 当日以降の編集はadminユーザのみ
-          if item["arrival"].blank? && item["departure"].blank?
+          if item["arrival"].nil? && item["departure"].nil?
           
           else
             attendance.update_attributes(item)
             flash[:success] = '勤怠時間を更新しました。'
           end
+          # redirect_to user_path(current_user.id)
+          # return
       end #eachの締め
     end
-    # redirect_to("/attendances/attend_edit")
-    redirect_to user_path(current_user.id)
+    
+    # if @user.name != "admin"
+      redirect_to user_path(current_user.id)
+    # else
+    #   redirect_to user_path(params[:id])
+    # end
+    
+    # return
     # redirect_to url:{:action=>"show", :controller=>"users", :id=>params[:id]}
-
   end
   
   def attend_edit

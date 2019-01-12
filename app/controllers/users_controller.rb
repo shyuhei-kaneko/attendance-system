@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     end
   # ▼月末(30or31日, 23:59:59)を取得します
   @last_day = @first_day.end_of_month
-  #byebug
+  # byebug
   # 次月の初日未満（初日は含まない）
   # https://h3poteto.hatenablog.com/entry/2013/12/08/140934
   # @to = Date.today.next_month.beginning_of_month
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
   # @attendance = @attendance.find_by(user_id: @user.id)
     (@first_day..@last_day).each do |temp_day|
       comparison_date = Date.new(temp_day.year,temp_day.month,temp_day.day)
-    	if Attendance.find_by(attendance_date: comparison_date, user_id: @user.id).nil?
+    	if @attendance.find_by(attendance_date: comparison_date, user_id: @user.id).nil?
     		work = Attendance.new(attendance_date: comparison_date, user_id: @user.id)
     		work.save
     	end
