@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get    'login'         => 'sessions#new'
   post   'login'         => 'sessions#create'
   delete 'logout'        => 'sessions#destroy'
-  patch  'attend_update' => 'attendances#attend_update'
+  # patch  'attend_update' => 'attendances#attend_update'
   get    'attend_edit'   => 'attendances#attend_edit'
   get    'work'          => 'attendances#work'
   get    'basic_info'    => 'attendances#basic_info'
@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get :following, :followers
+      patch  'attend_update' => 'attendances#attend_update'
     end
   end
   resources :account_activations, only: [:edit]

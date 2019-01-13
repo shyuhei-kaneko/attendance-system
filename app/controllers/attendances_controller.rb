@@ -59,7 +59,8 @@ class AttendancesController < ApplicationController
             # 当日以降の編集はadminユーザのみ
           elsif attendance.attendance_date > Date.current && @user.name != "admin"
             # byebug
-            if item["arrival"].blank? || item["departure"].blank? 
+            if item["arrival"] != "" || item["departure"] != "" 
+              # byebug
               message = '明日以降の勤怠編集は出来ません。'
               error_count += 1
             end
@@ -89,7 +90,8 @@ class AttendancesController < ApplicationController
     end
     
     # if @user.name != "admin"
-      redirect_to user_path(current_user.id)
+      # redirect_to user_path(current_user.id)
+      redirect_to user_path(params[:id])
     # else
     #   redirect_to user_path(params[:id])
     # end
