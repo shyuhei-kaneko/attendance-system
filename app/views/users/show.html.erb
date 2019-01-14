@@ -13,13 +13,13 @@
       <% if @user.pointing_work_time.present? %>
         <td>指定勤務時間  <%= @PWK %></td>
       <% else %>
-        <td>指定勤務時間 08 : 00</td>
+        <td>指定勤務時間 8.00</td>
       <% end %>
       
       <% if @user.pointing_work_time.present? %>
         <td colspan="3"><%= @Btime %> 基本時間</td>
       <% else %>
-        <td colspan="3">07 : 50 基本時間</td>
+        <td colspan="3">7.83 基本時間</td>
       <% end %>
             
       <td>初日 <%= @first_day.strftime("%m/%d") %></td>
@@ -38,7 +38,7 @@
       <td width="10"></td>
       
       <% if @attendance_sum.present? %>
-        <td><% "出勤日数 #{@attendance_sum}日"%></td>
+        <td>出勤日数 <%= @attendance_sum %>日</td>
       <% else %>
         <td><% 出勤日数 %></td>
       <% end %>
@@ -141,7 +141,7 @@
               <!--<td></td>-->
             </tr>
         <% end %>
-        <td align="center" height="50" colspan="2"><%= 0.00 %></td>
+        <td align="center" height="50" colspan="2"><%= @Putting_attend %></td>
         <td align="center" height="50" colspan="6"></td>
         <td align="center" height="50"><%# 滞在時間合計 %>
         <% total = 0 %>
@@ -162,5 +162,5 @@
         <td align="center" height="50">所属長承認</td>
     </table> 
   </body>
-  <%= render 'static_pages/user_logged_in' %>
+  <%#= render 'static_pages/user_logged_in' %>
 </html>

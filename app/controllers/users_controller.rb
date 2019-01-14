@@ -48,13 +48,15 @@ class UsersController < ApplicationController
     		work.save
     	end
   	end
-  	
-	@PWK = @user.pointing_work_time.strftime("%H : %M") if @user.pointing_work_time.present?
-	@Btime = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present? 
+  # byebug
+# 	@PWK = @user.pointing_work_time.strftime("%H : %M") if @user.pointing_work_time.present?
+	@PWK = (@user.pointing_work_time.to_time.hour + @user.pointing_work_time.to_time.min / 60.round(2)).round(2) if @user.pointing_work_time.present?
+# 	@Btime = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present?
+	@Btime = (@user.basic_work_time.to_time.hour + @user.basic_work_time.to_time.min / 60.round(2)).round(2) if @user.basic_work_time.present?
 	
   # 当月を昇順で取得し@daysへ代入
   @days = @user.attendances.where('attendance_date >= ? and attendance_date <= ?', @first_day, @last_day).order('attendance_date')
-  
+  # byebug
   if @days.present?
     @total_time = 0
   else
@@ -70,8 +72,21 @@ class UsersController < ApplicationController
   end
     
   #出勤日数表示
+  # require "time"
   @attendance_sum = @days.where.not(arrival: nil, departure: nil).count
-  end
+  # byebug
+  
+    #勤務時間計算
+    # require "time"
+    # b_time_hour = (@Btime.to_time.hour + @Btime.to_time.min / 60.round(2))
+  	if @attendance_sum == nil || @Btime == nil
+  	  @Putting_attend = 0
+  	else
+  	 # byebug
+  	  @Putting_attend = (@attendance_sum * @Btime).round(2)
+  	end
+  	
+  end # def show
   
   def new
     @user = User.new
@@ -109,6 +124,7 @@ class UsersController < ApplicationController
   end
   
   def destroy
+    # binding.pry
     User.find(params[:id]).destroy
     flash[:success] = "ユーザーを削除しました"
     redirect_to users_url

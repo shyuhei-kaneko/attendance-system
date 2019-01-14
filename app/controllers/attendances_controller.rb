@@ -1,6 +1,8 @@
 class AttendancesController < ApplicationController
   def basic_info
+    # byebug
     @user = User.find(current_user.id)
+    # @user = User.find(@user.id)
   end
   
   def ba_info_edit
@@ -57,7 +59,8 @@ class AttendancesController < ApplicationController
             message = '一部編集が無効となった項目があります。'
             
             # 当日以降の編集はadminユーザのみ
-          elsif attendance.attendance_date > Date.current && @user.name != "admin"
+          # elsif attendance.attendance_date > Date.current && @user.name != "admin"
+          elsif attendance.attendance_date > Date.current
             # byebug
             if item["arrival"] != "" || item["departure"] != "" 
               # byebug
