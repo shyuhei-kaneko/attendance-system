@@ -49,16 +49,22 @@ class UsersController < ApplicationController
     	end
   	end
   # byebug
-# 	@PWK = @user.pointing_work_time.strftime("%H : %M") if @user.pointing_work_time.present?
-	@PWK = (@user.pointing_work_time.to_time.hour + @user.pointing_work_time.to_time.min / 60.round(2)).round(2) if @user.pointing_work_time.present?
+	if @user.pointing_work_time.nil?
+	  @PWK = 8.00
+	else
+	  @PWK = (@user.pointing_work_time.to_time.hour + @user.pointing_work_time.to_time.min / 60.round(2)).round(2)
+	end
 # 	@Btime = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present?
-	@Btime = (@user.basic_work_time.to_time.hour + @user.basic_work_time.to_time.min / 60.round(2)).round(2) if @user.basic_work_time.present?
-	
+	if @user.basic_work_time.nil?
+	  @Btime = 7.83
+	else
+	  @Btime = (@user.basic_work_time.to_time.hour + @user.basic_work_time.to_time.min / 60.round(2)).round(2)
+	end
   # 当月を昇順で取得し@daysへ代入
   @days = @user.attendances.where('attendance_date >= ? and attendance_date <= ?', @first_day, @last_day).order('attendance_date')
   # byebug
   if @days.present?
-    @total_time = 0
+    @total_time = 0.00
   else
     i = 0
     @days.each do |d|
@@ -77,15 +83,16 @@ class UsersController < ApplicationController
   # byebug
   
     #勤務時間計算
-    # require "time"
-    # b_time_hour = (@Btime.to_time.hour + @Btime.to_time.min / 60.round(2))
-  	if @attendance_sum == nil || @Btime == nil
-  	  @Putting_attend = 0
-  	else
-  	 # byebug
-  	  @Putting_attend = (@attendance_sum * @Btime).round(2)
-  	end
-  	
+	  @Putting_attend = (@attendance_sum * @Btime).round(2)
+
+    #adminが一般ユーザーを見ているのかを判定　trueなら出勤/退勤ボタン非表示
+    @buttun_not_show_flag = 0
+    if params[:id].to_i != current_user.id
+      @buttun_not_show_flag = 1
+    end
+    
+  session[:user_id] = params[:id]
+  
   end # def show
   
   def new

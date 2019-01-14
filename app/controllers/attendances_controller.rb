@@ -1,6 +1,7 @@
 class AttendancesController < ApplicationController
   def basic_info
     # byebug
+    # @user
     @user = User.find(current_user.id)
     # @user = User.find(@user.id)
   end

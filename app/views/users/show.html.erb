@@ -94,7 +94,7 @@
               </td>
               <td width="130">
                 <%# 今日の年月日だったらボタン表示。年まで条件付けしないと前年や来年等の同月日にボタンが描画されてしまう為。 %>
-                <% if Date.current ==  temp_day %>
+                <% if Date.current ==  temp_day && @buttun_not_show_flag == 0 %>
                     <% if @attendance.find_by(attendance_date: temp_day, user_id: @user.id).arrival == nil %>  <%# 今日の出勤情報がモデル内に存在しているか判定 %>
                       <%= link_to "出 勤", work_path(id: @user.id, flag: "arrival_flag"), style:"color:white", class: "btn btn-primary" %>
                     <% elsif @attendance.find_by(attendance_date: temp_day, user_id: @user.id).departure == nil %>　<%# 退勤情報がモデル内に存在しているか判定 %>
@@ -103,6 +103,7 @@
                       <%# 退勤ボタンを押下済みならボタンは非表示 %>
                     <% end %>
                 <% end %>
+      
               </td>
               
               <td><%# 退勤時間 %>
