@@ -5,9 +5,13 @@
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "トップへ", root_path %></li>
         <% if logged_in? %>
-            <% if session[:user_id].to_i == 1 %>
+        <%# byebug %>
+            <% @flag = Flag.find(1) %>
+            <%# session[:user_id]はusers#showで可変(管理者→一般ユーザーを選択した場合。) %>
+            <%# if session[:user_id].to_i == 1 || current_user.name == "admin" %>
+            <% if @flag.admin_flag == "true" %>
               <li><%= link_to "基本情報更新", basic_info_path(current_user) %></li>
-              <li><%= link_to "ユーザー一覧", users_path(current_user) %></li>
+              <li><%= link_to "ユーザー一覧", users_path %></li>
             <% end %>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" >

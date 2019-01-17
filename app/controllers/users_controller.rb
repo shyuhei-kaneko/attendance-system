@@ -8,7 +8,9 @@ class UsersController < ApplicationController
 
   
   def index
+    # byebug
     @users = User.all.paginate(page: params[:page])
+    # @admin_flag = params[:admin_flag]
   end
   
   def show
@@ -16,6 +18,13 @@ class UsersController < ApplicationController
   if @user == nil
     @user = User.find(current_user.id)
   end
+  # byebug
+  if @user.id == 1
+    @flag = Flag.find(1)
+    @flag.admin_flag = "true"
+    @flag.save
+  end
+  
   @y_m_d = Date.current
   @youbi = %w[日 月 火 水 木 金 土]
     
@@ -90,9 +99,16 @@ class UsersController < ApplicationController
     if params[:id].to_i != current_user.id
       @buttun_not_show_flag = 1
     end
+
     
-  session[:user_id] = params[:id]
+  #adminユーザーが一般ユーザーの基本情報・プロフィールを更新する様の処理
+  session[:user_id] = @user.id
+  # session[:user_id] = current_user.id
+  # byebug
   
+    # if current_user.id == 1
+    #   @admin_flag = "true"
+    # end
   end # def show
   
   def new

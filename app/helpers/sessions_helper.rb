@@ -6,6 +6,14 @@ module SessionsHelper
     #   session[:user_id] = @user.id
     # else
       session[:user_id] = user.id
+      # @admin_id = user.id
+      # byebug
+      # if user.id == 1
+      #   session[:admin_id] == "true"
+      # else
+      #   session[:admin_id] == "false"
+      # end
+      # byebug
     # end
   end
 
@@ -42,6 +50,7 @@ module SessionsHelper
   
   # 現在のユーザーをログアウトする
   def log_out
+    # byebug
     session.delete(:user_id)
     @current_user = nil
   end

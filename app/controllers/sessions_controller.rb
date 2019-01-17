@@ -7,6 +7,8 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       # if user.activated?
+      # byebug
+        # @admin_flag = params[:@admin_flag]
         log_in user
         params[:session][:remember_me] == '1' ? remember(user) : forget(user)
         redirect_back_or user
@@ -24,6 +26,11 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out if logged_in?
+        # byebug
+    @flag = Flag.find(1)
+    @flag.admin_flag = nil
+    @flag.save
     redirect_to root_url
   end
+
 end
