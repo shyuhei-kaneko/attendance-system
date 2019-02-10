@@ -1,37 +1,34 @@
 class UsersController < ApplicationController
-  
+
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
                                         :following, :followers]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
-  
 
-  
+
+
   def index
     # byebug
     @users = User.all.paginate(page: params[:page])
     # @admin_flag = params[:admin_flag]
   end
-  
+
   def show
   @user = User.find_by(id: params[:id])
-  if @user == nil
-    @user = User.find(current_user.id)
-  end
-  # byebug
+
   if @user.id == 1
     @flag = Flag.find(1)
     @flag.admin_flag = "true"
     @flag.save
   end
-  
+
   @y_m_d = Date.current
   @youbi = %w[日 月 火 水 木 金 土]
-    
+
     if params[:first_day] == nil
        # params[:piyo]が存在しない(つまりデフォルト時)
        # ▼月初(今月の1日, 00:00:00)を取得します
-       @first_day = Date.new(Date.today.year, Date.today.month)
+       @first_day = Date.today.at_beginning_of_month
     else
        # ▼params[:piyo]が存在する(つまり切り替えボタン押下時)
        #  paramsの中身は"文字列"で送られてくるので注意
@@ -63,7 +60,8 @@ class UsersController < ApplicationController
 	else
 	  @PWK = (@user.pointing_work_time.to_time.hour + @user.pointing_work_time.to_time.min / 60.round(2)).round(2)
 	end
-# 	@Btime = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present?
+	@Btime_10 = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present?
+  # byebug
 	if @user.basic_work_time.nil?
 	  @Btime = 7.83
 	else
@@ -85,12 +83,12 @@ class UsersController < ApplicationController
       end
     end
   end
-    
+
   #出勤日数表示
   # require "time"
   @attendance_sum = @days.where.not(arrival: nil, departure: nil).count
   # byebug
-  
+
     #勤務時間計算
 	  @Putting_attend = (@attendance_sum * @Btime).round(2)
 
@@ -100,17 +98,17 @@ class UsersController < ApplicationController
       @buttun_not_show_flag = 1
     end
 
-    
+
   #adminユーザーが一般ユーザーの基本情報・プロフィールを更新する様の処理
   session[:user_id] = @user.id
   # session[:user_id] = current_user.id
   # byebug
-  
+
     # if current_user.id == 1
     #   @admin_flag = "true"
     # end
   end # def show
-  
+
   def new
     @user = User.new
   end
@@ -145,14 +143,14 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
-  
+
   def destroy
     # binding.pry
     User.find(params[:id]).destroy
     flash[:success] = "ユーザーを削除しました"
     redirect_to users_url
   end
-  
+
   def following
     @title = "フォロー"
     @user  = User.find(params[:id])
@@ -166,28 +164,28 @@ class UsersController < ApplicationController
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
-  
+
   private
   # 　def users_basic_params
   # 　 # params.permit(users: [:pointing_work_time, :basic_work_time])[:users]
   # 　 params.require(:user).permit(:pointing_work_time, :basic_work_time)
   # 　end
-  
+
 
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :affiliation,
                                    :password_confirmation, :pointing_work_time, :basic_work_time)
     end
-    
+
     # beforeアクション
-    
+
     # 正しいユーザーかどうか確認
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_url) unless current_user?(@user)
     end
-    
+
     # 管理者かどうか確認
     def admin_user
       redirect_to(root_url) unless current_user.admin?
