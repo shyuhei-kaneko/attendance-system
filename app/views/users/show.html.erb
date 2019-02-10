@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html>
-
+<br>
 <body>
  <table border="1" width="1200">
     <tr align="center">
       <td height="45">
-        <%= link_to "←", user_path(first_day: @first_day.prev_month),style:"color:white", class: 'btn btn-default btn-primary' %>   
-           <%= @first_day.year %>年<%= @first_day.month %>月の時間管理表   
+        <%= link_to "←", user_path(first_day: @first_day.prev_month),style:"color:white", class: 'btn btn-default btn-primary' %>
+           <%= @first_day.year %>年<%= @first_day.month %>月 時間管理表
         <%= link_to "→", user_path(first_day: @first_day.next_month),style:"color:white", class: 'btn btn-default btn-primary' %>
-        
       </td>
       <% if @user.pointing_work_time.present? %>
-        <td>指定勤務時間  <%= @PWK %></td>
+      <td>
+        <ul style="list-style:none;">
+          <li>指定勤務時間  <%= @PWK %></li>
+          <li>指定勤務終了時間  <%= @Btime_10 %></li>
+        </ul>
+      </td>
       <% else %>
         <td>指定勤務時間 8.00</td>
       <% end %>
-      
-      <% if @user.pointing_work_time.present? %>
-        <td colspan="3"><%= @Btime %> 基本時間</td>
-      <% else %>
-        <td colspan="3">7.83 基本時間</td>
-      <% end %>
-            
+
+      <!--この下５行分勤怠Bで作成したコード。削除予定-->
+      <%# if @user.pointing_work_time.present? %>
+        <!-- <td colspan="3"><%＃= @Btime %> 基本時間</td> -->
+      <%# else %>
+        <!-- <td colspan="3">7.83 基本時間</td> -->
+      <%# end %>
+      <td colspan="3">基本時間</td>
+
+
       <td>初日 <%= @first_day.strftime("%m/%d") %></td>
-      
+
     </tr>
     <tr align="center">
       <% if @user.affiliation.present? %>
@@ -31,21 +38,21 @@
       <% else %>
         <td>所属 <%=  %></td>
       <% end %>
-      
+
       <td>氏名 <%= @user.name %></td>
       <td>コード</td>
-      
+
       <td width="10"></td>
-      
+
       <% if @attendance_sum.present? %>
         <td>出勤日数 <%= @attendance_sum %>日</td>
       <% else %>
         <td><% 出勤日数 %></td>
       <% end %>
-      
+
       <td>締め <%= @last_day.strftime("%m/%d") %></td>
     </tr>
-    </table> 
+    </table>
 </body>
 　
 　<br><br><br>
@@ -53,27 +60,47 @@
 　<body>
 　  <%= link_to "勤怠を編集", attend_edit_path(first_day: @first_day, id: @user.id), style:"color:white", class: 'btn btn-default btn-primary' %>
 　  <%= link_to "勤怠を編集", attend_edit_path(first_day: @first_day, id: @user.id), style:"color:white", class: 'btn btn-default btn-primary' %>
+
+
+
 　  <table class="s-tbl" border="1" width="1200">
       <tr align="center">
-        <td rowspan="2">日付</td>
-        <td rowspan="2">曜日</td>
+        <td rowspan="3">残業申請</td>
+        <td rowspan="3">日付</td>
+        <td rowspan="3">曜日</td>
+        <td colspan="8">【実績】</td>
+        <td colspan="8">所定外勤務</td>
+      </tr>
+      <tr align="center">
         <td colspan="3">出社</td>
         <td colspan="3">退社</td>
         <td rowspan="2">滞在時間</td>
-        <td rowspan="2" colspan="3" >備考</td>
-        <!--<td rowspan="2">残業指示</td>-->
-        <!--<td rowspan="2">残業指示者</td>-->
+        <td rowspan="2">備考</td>
+        <td colspan="2">終了予定時間</td>
+        <td rowspan="2">時間外時間</td>
+        <td rowspan="2">業務処理内容</td>
+        <td rowspan="2">業務確認印</td>
       </tr>
-      
       <tr align="center">
-        <td>時</td><td>分</td><td width="130"></td><td>時</td><td>分</td><td width="10"></td>
+        <div class="time_area">
+          <td>時</td><td>分</td><!--出社時分-->
+        </div>
+        <td width="130"></td><!--勤怠ボタン-->
+        <div class="time_area">
+          <td>時</td><td>分</td><!--退社時分-->
+        </div>
+        <td width="10"></td>
+        <div class="time_area">
+          <td>時</td><td>分</td>
+        </div>
       </tr>
         <% (@first_day..@last_day).each do |temp_day| %>
             <tr align="center" height="50">
+              <td><%= link_to "残業申請" ,style:"color:white", class: 'btn btn-default btn-primary' %></td>
               <td><%= temp_day.month %>/<%= temp_day.day %></td>
               <td><%= @youbi [@first_day.change(day: temp_day.day).wday] %></td>
-              
-              
+
+
               <td><%# 出勤時間 %>
               <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
@@ -104,9 +131,9 @@
                       <%# 退勤ボタンを押下済みならボタンは非表示 %>
                     <% end %>
                 <% end %>
-      
+
               </td>
-              
+
               <td><%# 退勤時間 %>
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
@@ -116,7 +143,7 @@
                   <% end %>
                 <% end %>
               </td>
-              
+
               <td><%# 退勤分 %>
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
@@ -138,31 +165,35 @@
                   <% end %>
                 <% end %>
               </td>
-              <td colspan="3" ></td>
-              <!--<td></td>-->
-              <!--<td></td>-->
+              <td></td><!--備考-->
+              <div class="time_area">
+                <td></td><!--終了時間　時-->
+                <td></td><!--終了時間　分-->
+              </div>
+              <td></td><!--時間外時間-->
+              <td></td><!--業務処理内容-->
+              <td></td><!--業務確認印-->
             </tr>
         <% end %>
-        <td align="center" height="50" colspan="2"><%= @Putting_attend %></td>
+        <td align="center" height="50"><%= @Putting_attend %></td>
+        <td align="center" height="50" colspan="2"></td>
         <td align="center" height="50" colspan="6"></td>
-        <td align="center" height="50"><%# 滞在時間合計 %>
-        <% total = 0 %>
-         <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
-            <% @attendance.each do |value| %>
-              <% departure_time = value[:departure] %>
-              <% arrival_time = value[:arrival] %>
-              <% if departure_time != nil %>
-                <% time_in_company = (departure_time - arrival_time) / 3600 %>
-                <% total += time_in_company %>
-              <% end %>
+        <td align="center" height="50"><!--滞在時間合計-->
+            <% total = 0 %>
+             <% if @attendance.present? %><!--新規ユーザーの場合はデータが存在しないからエラーになる-->
+                <% @attendance.each do |value| %>
+                  <% departure_time = value[:departure] %>
+                  <% arrival_time = value[:arrival] %>
+                  <% if departure_time != nil %>
+                    <% time_in_company = (departure_time - arrival_time) / 3600 %>
+                    <% total += time_in_company %>
+                  <% end %>
+                <% end %>
             <% end %>
-        <% end %>
-          <%= total.round(2) if  @first_day.year == @y_m_d.year && @first_day.month == @y_m_d.month %>
+            <%= total.round(2) if  @first_day.year == @y_m_d.year && @first_day.month == @y_m_d.month %>
         </td>
-        <!--<td align="center" height="50"></td>-->
-        <!--<td align="center" height="50"></td>-->
-        <td align="center" height="50">所属長承認</td>
-    </table> 
+        <td align="center" height="50" colspan="5"></td>
+        <td align="center" height="50"></td><!--ここに所属長承認のイベントボタンを配置する。-->
+    </table>
   </body>
-  <%#= render 'static_pages/user_logged_in' %>
 </html>

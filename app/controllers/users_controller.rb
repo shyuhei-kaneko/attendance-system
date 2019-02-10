@@ -15,10 +15,7 @@ class UsersController < ApplicationController
 
   def show
   @user = User.find_by(id: params[:id])
-  # if @user == nil
-  #   @user = User.find(current_user.id)
-  # end
-  # byebug
+
   if @user.id == 1
     @flag = Flag.find(1)
     @flag.admin_flag = "true"
@@ -31,7 +28,7 @@ class UsersController < ApplicationController
     if params[:first_day] == nil
        # params[:piyo]が存在しない(つまりデフォルト時)
        # ▼月初(今月の1日, 00:00:00)を取得します
-       @first_day = Date.new(Date.today.year, Date.today.month)
+       @first_day = Date.today.at_beginning_of_month
     else
        # ▼params[:piyo]が存在する(つまり切り替えボタン押下時)
        #  paramsの中身は"文字列"で送られてくるので注意
@@ -63,7 +60,8 @@ class UsersController < ApplicationController
 	else
 	  @PWK = (@user.pointing_work_time.to_time.hour + @user.pointing_work_time.to_time.min / 60.round(2)).round(2)
 	end
-# 	@Btime = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present?
+	@Btime_10 = @user.basic_work_time.strftime("%H : %M") if @user.basic_work_time.present?
+  # byebug
 	if @user.basic_work_time.nil?
 	  @Btime = 7.83
 	else
