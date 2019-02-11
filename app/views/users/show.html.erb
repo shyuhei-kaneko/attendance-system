@@ -82,9 +82,7 @@
         <td rowspan="2">業務確認印</td>
       </tr>
       <tr align="center">
-        <div class="time_area">
-          <td>時</td><td>分</td><!--出社時分-->
-        </div>
+        <td>時</td><td>分</td><!--出社時分-->
         <td width="130"></td><!--勤怠ボタン-->
         <div class="time_area">
           <td>時</td><td>分</td><!--退社時分-->
@@ -99,20 +97,17 @@
               <td><%= link_to "残業申請" ,style:"color:white", class: 'btn btn-default btn-primary' %></td>
               <td><%= temp_day.month %>/<%= temp_day.day %></td>
               <td><%= @youbi [@first_day.change(day: temp_day.day).wday] %></td>
-
-
-              <td><%# 出勤時間 %>
-              <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
-                  <% @attendance.each do |value| %>
-                    <% if value.arrival.present? %>
-                      <%= value.arrival.strftime("%H") if value.attendance_date == temp_day %>
-                    <% end %>
-                  <% end %>
-                <% end %>
-              </td>
-
-              <td><%# 出勤分 %>
+              <td class="time_area" ><!--出勤時間-->
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
+                    <% @attendance.each do |value| %>
+                      <% if value.arrival.present? %>
+                        <%= value.arrival.strftime("%H") if value.attendance_date == temp_day %>
+                      <% end %>
+                    <% end %>
+                 <% end %>
+               </td>
+              <td class="time_area" ><!--出勤分-->
+                <% if @attendance.present? %><!--新規ユーザーの場合はデータが存在しないからエラーになる-->
                   <% @attendance.each do |value| %>
                     <% if value.arrival.present? %>
                       <%= value.arrival.strftime("%M") if value.attendance_date == temp_day %>
@@ -120,6 +115,7 @@
                   <% end %>
                 <% end %>
               </td>
+
               <td width="130">
                 <%# 今日の年月日だったらボタン表示。年まで条件付けしないと前年や来年等の同月日にボタンが描画されてしまう為。 %>
                 <% if Date.current ==  temp_day && @buttun_not_show_flag == 0 %>
@@ -134,8 +130,8 @@
 
               </td>
 
-              <td><%# 退勤時間 %>
-                <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
+              <td class="time_area" ><!--退勤時間-->
+                <% if @attendance.present? %><!--新規ユーザーの場合はデータが存在しないからエラーになる-->
                   <% @attendance.each do |value| %>
                     <% if value.departure.present? %>
                       <%= value.departure.strftime("%H") if value.attendance_date == temp_day %>
@@ -144,7 +140,7 @@
                 <% end %>
               </td>
 
-              <td><%# 退勤分 %>
+              <td class="time_area" ><!--退勤分-->
                 <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
                   <% @attendance.each do |value| %>
                     <% if value.departure.present? %>
@@ -167,8 +163,8 @@
               </td>
               <td></td><!--備考-->
               <div class="time_area">
-                <td></td><!--終了時間　時-->
-                <td></td><!--終了時間　分-->
+                <td class="time_area" ></td><!--終了時間　時-->
+                <td class="time_area" ></td><!--終了時間　分-->
               </div>
               <td></td><!--時間外時間-->
               <td></td><!--業務処理内容-->
