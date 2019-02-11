@@ -103,22 +103,12 @@
               <td><%= temp_day.month %>/<%= temp_day.day %></td>
               <td><%= @youbi [@first_day.change(day: temp_day.day).wday] %></td>
               <td class="time_area" ><!--出勤時間-->
-                <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
-                    <% @attendance.each do |value| %>
-                      <% if value.arrival.present? %>
-                        <%= value.arrival.strftime("%H") if value.attendance_date == temp_day %>
-                      <% end %>
-                    <% end %>
-                 <% end %>
-               </td>
+                <% day = @days.find_by(attendance_date: temp_day) %>
+                <%= day.arrival.strftime("%H") if day.arrival %>
+              </td>
               <td class="time_area" ><!--出勤分-->
-                <% if @attendance.present? %><!--新規ユーザーの場合はデータが存在しないからエラーになる-->
-                  <% @attendance.each do |value| %>
-                    <% if value.arrival.present? %>
-                      <%= value.arrival.strftime("%M") if value.attendance_date == temp_day %>
-                    <% end %>
-                  <% end %>
-                <% end %>
+                <% day = @days.find_by(attendance_date: temp_day) %>
+                <%= day.arrival.strftime("%M") if day.arrival %>
               </td>
 
               <td width="130">
@@ -136,23 +126,13 @@
               </td>
 
               <td class="time_area" ><!--退勤時間-->
-                <% if @attendance.present? %><!--新規ユーザーの場合はデータが存在しないからエラーになる-->
-                  <% @attendance.each do |value| %>
-                    <% if value.departure.present? %>
-                      <%= value.departure.strftime("%H") if value.attendance_date == temp_day %>
-                    <% end %>
-                  <% end %>
-                <% end %>
+                <% day = @days.find_by(attendance_date: temp_day) %>
+                <%= day.departure.strftime("%H") if day.departure %>
               </td>
 
               <td class="time_area" ><!--退勤分-->
-                <% if @attendance.present? %><%# 新規ユーザーの場合はデータが存在しないからエラーになる %>
-                  <% @attendance.each do |value| %>
-                    <% if value.departure.present? %>
-                      <%= value.departure.strftime("%M") if value.attendance_date == temp_day %>
-                    <% end %>
-                  <% end %>
-                <% end %>
+                <% day = @days.find_by(attendance_date: temp_day) %>
+                <%= day.departure.strftime("%M") if day.departure %>
               </td>
               <td width="10"></td>
               <td><%# 滞在時間 %>

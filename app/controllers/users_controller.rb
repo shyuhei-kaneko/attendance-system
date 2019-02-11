@@ -13,6 +13,7 @@ class UsersController < ApplicationController
     # @admin_flag = params[:admin_flag]
   end
 
+
   def show
   @user = User.find_by(id: params[:id])
 
