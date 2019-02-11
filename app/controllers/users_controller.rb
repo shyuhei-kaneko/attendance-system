@@ -16,11 +16,11 @@ class UsersController < ApplicationController
   def show
   @user = User.find_by(id: params[:id])
 
-  if @user.id == 1
-    @flag = Flag.find(1)
-    @flag.admin_flag = "true"
-    @flag.save
-  end
+  # if @user.id == 1
+  #   @flag = Flag.find(1)
+  #   @flag.admin_flag = "true"
+  #   @flag.save
+  # end
 
   @y_m_d = Date.current
   @youbi = %w[日 月 火 水 木 金 土]
