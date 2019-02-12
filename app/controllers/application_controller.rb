@@ -12,4 +12,13 @@ class ApplicationController < ActionController::Base
         redirect_to login_url
       end
     end
+
+    # def arrival_h(temp_day)
+    #   value = self.find_by(attendance_date: temp_day)
+    #   # self.each do |atttendance|
+    #     if value
+    #       return value.arrival.strftime("%H")
+    #     end
+    #   # end
+    # end
 end

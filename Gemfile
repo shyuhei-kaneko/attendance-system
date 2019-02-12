@@ -49,6 +49,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'rails-i18n'
 gem 'sendgrid-ruby'
 
+# gem 'bootstrap'
+gem 'popper_js'
 # group :development, :test do
 #   gem 'pry-rails'
 #   gem 'pry-byebug'
